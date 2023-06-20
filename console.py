@@ -23,7 +23,7 @@ class HBNBCommand(cmd.Cmd):
                'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
               }
-    dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
+    dot_cmds = ['all', 'count', 'create', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
              'max_guest': int, 'price_by_night': int,
@@ -96,9 +96,11 @@ class HBNBCommand(cmd.Cmd):
         """ Method to exit the HBNB console"""
         exit()
 
-    def help_quit(self):
-        """ Prints the help documentation for quit  """
-        print("Exits the program with formatting\n")
+    def help_quit(self) -> None:
+        """Updates the help for quit"""
+        print("")
+        print("The `quit` command issues a command to quit the CLI")
+        print("with formatting.\n[Usage]:\n(hbnb) quit\n")
 
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
@@ -108,6 +110,10 @@ class HBNBCommand(cmd.Cmd):
     def help_EOF(self):
         """ Prints the help documentation for EOF """
         print("Exits the program without formatting\n")
+        print("The `EOF` command returns True to break the cmdloop\n", end="")
+        print("and exits the CLI.\n")
+        print("[Usage]:\n(hbnb) EOF\nor\n(hbnb) <CTRL + C>")
+        print("or\n(hbnb) <CTRL + Z>\n")
 
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
@@ -128,8 +134,15 @@ class HBNBCommand(cmd.Cmd):
 
     def help_create(self):
         """ Help information for the create method """
-        print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("Creates a class of any type\n")
+        print("The `create` command creates an instance of a class, ", end="")
+        print("saves it to the storage and prints out the ID of the", end=" ")
+        print("instance created.\n")
+        print("Models available includes:\n")
+        print("\tAmenity\n\tBaseModel\n\tCity\n\tPlace\n\tReview\n\t", end="")
+        print("State\n\tUser\n")
+        print("[Usage]: create <classname>\n")
+        print("Sample:\n(hbnb) create User\n")
 
     def do_show(self, args):
         """ Method to show an individual object """
@@ -161,8 +174,13 @@ class HBNBCommand(cmd.Cmd):
 
     def help_show(self):
         """ Help information for the show command """
-        print("Shows an individual instance of a class")
+        print("Shows an individual instance of a class\n")
+        print("The `show` command displays the details and string", end=" ")
+        print("representation of an instance based on class name", end=" ")
+        print("and instance id provided.\n")
         print("[Usage]: show <className> <objectId>\n")
+        print("Sample:\n(hbnb) show User abcd-1234-5678-0987")
+        print("")
 
     def do_destroy(self, args):
         """ Destroys a specified object """
@@ -187,7 +205,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -195,7 +213,10 @@ class HBNBCommand(cmd.Cmd):
     def help_destroy(self):
         """ Help information for the destroy command """
         print("Destroys an individual instance of a class")
+        print("The `destroy` command deletes the details of an ", end="")
+        print("instance based on class name and instance id provided.\n")
         print("[Usage]: destroy <className> <objectId>\n")
+        print("Sample:\n(hbnb) destroy User abcd-1234-5678-0987\n")
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
@@ -217,8 +238,11 @@ class HBNBCommand(cmd.Cmd):
 
     def help_all(self):
         """ Help information for the all command """
-        print("Shows all objects, or all of a class")
+        print("Shows all objects, or all of a class\n")
+        print("The `all` command displays the string representation", end="")
+        print(" of all class instances present in the storage.\n")
         print("[Usage]: all <className>\n")
+        print("Sample:\n(hbnb) all User\nor\n(hbnb) User.all()\n")
 
     def do_count(self, args):
         """Count current number of class instances"""
@@ -229,8 +253,12 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def help_count(self):
-        """ """
-        print("Usage: count <class_name>")
+        """ Help information for the count command """
+        print("")
+        print("The `count` command displays the number of instances", end="")
+        print(" of a specified class found in the storage.", end="\n")
+        print("[Usage]: count <class_name>")
+        print("Sample:\n(hbnb) count User'\nor\n(hbnb) User.count()\n")
 
     def do_update(self, args):
         """ Updates a certain object with new info """
@@ -317,8 +345,14 @@ class HBNBCommand(cmd.Cmd):
 
     def help_update(self):
         """ Help information for the update class """
-        print("Updates an object with new information")
+        print("Updates an object with new information\n")
+        print("The `update` command update a specified instance of a", end="")
+        print(" using the class name and the ID of the instance, and", end="")
+        print(" and the specifying the attribute to update or adding", end="")
+        print(" a new attribute plus the value.\n")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+        print("Sample:\n(hbnb) update User 1234-5678 email 'test@oop.com'\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
