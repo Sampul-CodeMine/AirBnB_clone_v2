@@ -78,7 +78,7 @@ class FileStorage():
                 self.new(eval(class_name + "(**val)"))
         except FileNotFoundError:
             pass
-        
+
     def delete(self, obj=None):
         """This is a public instance method that deletes an object from the
         class private __object property.

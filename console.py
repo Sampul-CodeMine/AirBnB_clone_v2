@@ -73,14 +73,14 @@ class HBNBCommand(cmd.Cmd):
 
     """Specify the prompt for the CLI"""
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-    
+
     dot_cmds = ['all', 'count', 'create', 'show', 'destroy', 'update']
-    
+
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
             print('(hbnb)')
-    
+
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
 
@@ -131,7 +131,7 @@ class HBNBCommand(cmd.Cmd):
             pass
         finally:
             return line
-    
+
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
@@ -169,7 +169,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args) -> None:
         """Public instance method that creates new instance of a class, save
         it to a JSON file and print the `id` of the instance"""
-        
+
         try:
             if not args:
                 raise SyntaxError()
