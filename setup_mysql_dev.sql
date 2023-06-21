@@ -3,7 +3,7 @@
 -- Creates a Schema/database if not exist
 CREATE SCHEMA IF NOT EXISTS `hbnb_dev_db`;
 
--- Drop user if already existing and create a new user
+-- Drop the user if it is already existing and create a new user
 DROP USER IF EXISTS 'hbnb_dev'@'localhost';
 CREATE USER 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
 
