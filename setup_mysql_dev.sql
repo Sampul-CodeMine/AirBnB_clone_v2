@@ -1,3 +1,5 @@
+-- CREATES A DATABASE AND USER FOR DEVELOPMENT PURPOSES
+
 -- Creates a Schema/database if not exist
 CREATE SCHEMA IF NOT EXISTS `hbnb_dev_db`;
 
