@@ -35,15 +35,28 @@ class BaseModel():
             kwargs (any) - keyworded key and valued paired arguments
         """
         if kwargs != {} and kwargs is not None and bool(kwargs):
-            for key in kwargs:
+            # for key in kwargs:
+            #     if key in ["created_at", "updated_at"]:
+            #         self.__dict__[key] = dt.fromisoformat(kwargs[key])
+            #     else:
+            #         self.__dict__[key] = kwargs[key]
+            for key, value in kwargs.items():
                 if key in ["created_at", "updated_at"]:
-                    self.__dict__[key] = dt.fromisoformat(kwargs[key])
+                    value = dt.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                if key != "__class__":
+                    setattr(self, key, value)
+                if 'id' not in kwargs:
+                    self.id = str(uid.uuid4())
+                if 'created_at' not in kwargs:
+                    self.created_at = dt.now()
+
+                if 'created_at' in kwargs and 'updated_at' not in kwargs:
+                    self.updated_at = self.created_at
                 else:
-                    self.__dict__[key] = kwargs[key]
+                    self.updated_at = dt.now()
         else:
             self.id = str(uid.uuid4())
-            self.created_at = dt.utcnow()
-            self.updated_at = dt.utcnow()
+            self.created_at = self.updated_at = dt.utcnow()
 
     def __str__(self) -> str:
         """Public instance method for the BaseModel that returns a String
@@ -51,10 +64,15 @@ class BaseModel():
         return "[{}] ({}) {}".format(type(self).__name__,
                                      self.id, self.__dict__)
 
+    def __repr__(self):
+        """return a string representaion"""
+        return self.__str__()
+
     def save(self) -> None:
         """Public instance method that updates the `updated_at` public
         instance property"""
         self.updated_at = dt.now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self) -> dict:
@@ -64,4 +82,11 @@ class BaseModel():
         data["__class__"] = type(self).__name__
         data["created_at"] = data["created_at"].isoformat()
         data["updated_at"] = data["updated_at"].isoformat()
+        if data["_sa_instance_state"]:
+            data.pop("_sa_instance_state")
         return data
+
+    def delete(self):
+        """Public instance method that Deletes the current instance from the
+        model storage"""
+        models.storage.delete(self)

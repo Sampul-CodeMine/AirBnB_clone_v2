@@ -1,6 +1,19 @@
 #!/usr/bin/python3
-""" importing the FileStorage module."""
-from models.engine.file_storage import FileStorage as fs
+""" importing the FileStorage/DBStorage module."""
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from os import getenv
 
-storage = fs()
+if getenv('HBNB_TYPE_STORAGE') == 'db':
+    from models.engine.db_storage import DBStorage
+    storage = DBStorage()
+else:
+    from models.engine.file_storage import FileStorage as fs
+    storage = fs()
+
 storage.reload()
