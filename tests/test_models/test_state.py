@@ -1,30 +1,19 @@
 #!/usr/bin/python3
-"""Class to Perform Test on State Object"""
-
-import unittest
-from models.amenity import Amenity
-from models.base_model import BaseModel
-from models.city import City
-from models.place import Place
-from models.review import Review
+""" """
+from tests.test_models.test_base_model import test_basemodel
 from models.state import State
-from models.user import User
 
 
-class Teststate(unittest.TestCase):
+class test_state(test_basemodel):
+    """ """
 
-    def test_class(self):
-        new_state = State()
-        self.assertEqual(new_state.__class__.__name__, "State")
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "State"
+        self.value = State
 
-    def test_container(self):
-        new_state = State()
-        self.assertEqual(new_state.__class__.__name__, "State")
-
-    def test_state(self):
-        """
-        Test attributes of State Object
-        """
-        new_state = State()
-        new_state.name = "Lagos"
-        self.assertEqual(new_state.name, 'Lagos')
+    def test_name3(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.name), str)

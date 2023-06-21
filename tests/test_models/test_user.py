@@ -1,26 +1,34 @@
 #!/usr/bin/python3
-"""Class to Perform Test on User Object"""
-
-import unittest
-from models.amenity import Amenity
-from models.base_model import BaseModel
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
+""" """
+from tests.test_models.test_base_model import test_basemodel
 from models.user import User
 
 
-class Testuser(unittest.TestCase):
+class test_User(test_basemodel):
+    """ """
 
-    def test_User(self):
-        """
-        Test attributes of Class User
-        """
-        new_user = User()
-        new_user.first_name = 'Test'
-        new_user.last_name = 'Admin'
-        new_user.email = 'tester@oop.com'
-        self.assertEqual(new_user.first_name, 'Test')
-        self.assertEqual(new_user.last_name, 'Admin')
-        self.assertEqual(new_user.email, 'tester@oop.com')
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "User"
+        self.value = User
+
+    def test_first_name(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.first_name), str)
+
+    def test_last_name(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.last_name), str)
+
+    def test_email(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.email), str)
+
+    def test_password(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.password), str)
