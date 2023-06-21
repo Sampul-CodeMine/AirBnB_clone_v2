@@ -15,7 +15,7 @@ from models import storage
 
 
 """
-This is a Python class that will act as an interface for the first phase
+ This Python class acts as an interface for the first phase
 of the AirBnB Clone project.
 """
 
