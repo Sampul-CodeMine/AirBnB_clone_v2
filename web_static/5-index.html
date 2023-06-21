@@ -1,35 +1,49 @@
 <!DOCTYPE html>
+<!-- Adding Locations and Amenities section - 0x01 - AirBnB clone - Web static -->
 <html lang="en">
-	<head>
-		<title>AirBnB clone</title>
+<head>
+        <meta charset="UTF-8">
+        <title>AirBnB Clone</title>
+        <!-- link to the favicon image -->
+        <link rel="shortcut icon" href="./images/icon.png" type="image/x-icon">
+        <!-- links to the external CSS files -->
+        <link rel="stylesheet" href="./styles/4-common.css">
+        <link rel="stylesheet" href="./styles/3-header.css">
+        <link rel="stylesheet" href="./styles/5-filters.css">
+        <link rel="stylesheet" href="./styles/3-footer.css">
+</head>
+<body>
+        <!-- Page Header Starts -->
+        <header></header>
+        <!-- Page Header Ends -->
 
-		<link rel="shortcut icon" href="images/icon.ico" >
+        <!-- Div Container Starts -->
+        <div class="container">
+                <!-- Section Filter Starts -->
+                <section class="filters">
+                        <button>Search</button>
+                        <!-- Section Filter Location Starts -->
+                        <div class="locations">
+                                <h3>States</h3>
+                                <h4>Asaba, Delta State</h4>
+                        </div>
+                        <!-- Section Filter Location Ends -->
 
-		<link rel="stylesheet" href="styles/4-common.css"/>
-		<link rel="stylesheet" href="styles/3-header.css"/>
-		<link rel="stylesheet" href="styles/3-footer.css"/>
-		<link rel="stylesheet" href="styles/5-filters.css"/>
-	</head>
-    <body>
-		<header>
-			<div id="header_logo"></div>
-		</header>
-		<div class="container">
-			<section class="filters">
-				<button>Search</button>
-				<div class="locations">
-					<h3>States</h3>
-					<h4>California, Arizona...</h4>
-				</div>
-				<div class="amenities">
-					<h3>Amenities</h3>
-					<h4>Internet, Kitchen...</h4>
-				</div>
-
-			</section>
-		</div>
-		<footer>
-			<p>Holberton School</p>
-		</footer>
-	</body>
+                        <!-- Section Filter Amenities Starts -->
+                        <div class="amenities">
+                                <h3>Amenities</h3>
+                                <h4>Free Wifi, Cyber Cafe</h4>
+                        </div>
+                        <!-- Section Filter Amenities Ends -->
+                </section>
+                <!-- Section Filter Ends -->
+        </div>
+        <!-- Div Container Ends -->
+        
+        <!-- Page Footer Starts -->
+        <footer>
+                <p>Best School</p>
+        </footer>
+        <!-- Page Header Ends -->
+</body>
 </html>
