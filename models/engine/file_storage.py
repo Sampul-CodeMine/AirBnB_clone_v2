@@ -17,10 +17,14 @@ flat database (json file)
 """
 
 
-class FileStorage():
+class FileStorage:
     """
     This is a class responsible for data storage for AirBnB Clone project.
+    Attributes:
+        __file_path: path to the JSON file
+        __objects: objects will be stored
     """
+
     __file_path = 'file.json'
     __objects = {}
 
@@ -39,7 +43,7 @@ class FileStorage():
                     of_same_type[key] = val
             return of_same_type
 
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj: dict) -> None:
         """
@@ -49,8 +53,9 @@ class FileStorage():
         Args:
             obj (dict) - a dictionaary object
         """
-        obj_key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        FileStorage.__objects[obj_key] = obj
+        if obj:
+            obj_key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            FileStorage.__objects[obj_key] = obj
 
     def save(self) -> None:
         """
@@ -88,6 +93,11 @@ class FileStorage():
         """
         if obj:
             item = "{}.{}".format(type(obj).__name__, obj.id)
-        if self.__objects[item]:
-            del self.__objects[item]
-            self.save()
+            if self.__objects[item]:
+                del self.__objects[item]
+                self.save()
+
+    def close(self):
+        """This is a class public instance method that Deserialize JSON file
+        to objects and then call the reload method."""
+        self.reload()
