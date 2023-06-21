@@ -15,8 +15,8 @@ from models import storage
 
 
 """
- This Python class acts as an interface for the first phase
-of the AirBnB Clone project.
+This Python class acts as an interface for the first phase of the 
+AirBnB Clone project.
 """
 
 all_classes = {
