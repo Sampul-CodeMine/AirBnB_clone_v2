@@ -1,9 +1,9 @@
 -- CREATES A DATABASE AND USER FOR DEVELOPMENT PURPOSES
 
--- Creates a Schema/database if not exist
+-- Creates a Schema/database hbnb_dev_db if it does not exist
 CREATE SCHEMA IF NOT EXISTS `hbnb_dev_db`;
 
--- Drop the user if it is already existing and create a new user
+-- Drop the user hbnb_dev if it is already existing and create a new user
 DROP USER IF EXISTS 'hbnb_dev'@'localhost';
 CREATE USER 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
 
