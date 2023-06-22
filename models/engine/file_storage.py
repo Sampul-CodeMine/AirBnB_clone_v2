@@ -15,22 +15,8 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self, cls=None) -> dict:
-        """
-        This is a public instance method that returns the private instance
-        attribute `__object` which is a dictionary
-        Attributes:
-            cls (class): a class which is by default None
-        Return:
-            A dictionary of objects
-        """
-        if cls:
-            of_same_type = dict()
-            for key, val in self.__objects.items():
-                if val.__class__ == cls:
-                    of_same_type[key] = val
-            return of_same_type
-
+    def all(self):
+        """Returns a dictionary of models currently in storage"""
         return FileStorage.__objects
 
     def new(self, obj):
@@ -69,17 +55,3 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-
-    def delete(self, obj=None) -> None:
-        """This is a public instance method that deletes an object from the
-        class private __object property.
-
-        Args:
-            obj (dict): the object to delete from __object
-        """
-        if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-
-            if self.__objects[key]:
-                del self.__objects[key]
-                self.save()
