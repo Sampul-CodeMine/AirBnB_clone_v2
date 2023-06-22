@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+from models.base_model import BaseModel
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class FileStorage:
@@ -23,14 +30,15 @@ class FileStorage:
         Return:
             A dictionary of objects
         """
-        if cls:
-            of_same_type = dict()
+        if cls is not None:
+            if type(cls) == str:
+                cls = eval(cls)
+            dict_cls = {}
             for key, val in self.__objects.items():
-                if val.__class__ == cls:
-                    of_same_type[key] = val
-            return of_same_type
-
-        return FileStorage.__objects
+                if type(val) == cls:
+                    dict_cls[key] = val
+            return dict_cls
+        return self.__objects
 
     def new(self, obj) -> None:
         """Adds new object to storage dictionary"""
@@ -77,8 +85,11 @@ class FileStorage:
             obj (dict): the object to delete from __object
         """
         if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
+            try:
+                del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
+            except (AttributeError, KeyError):
+                pass        
 
-            if self.__objects[key]:
-                del self.__objects[key]
-                self.save()
+    def close(self):
+        """Call the reload method."""
+        self.reload()

@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 """Importing some Standard modules and modules from our packages"""
-from models.amenity import Amenity
+from os import getenv
 from models.base_model import BaseModel, Base
+from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from os import getenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 import MySQLdb
 
 """
@@ -42,7 +42,6 @@ class DBStorage:
         self.__engine = create_engine('mysql+mysqldb://',
                                       creator=lambda: db_conn,
                                       pool_pre_ping=True)
-        self.reload()
 
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
@@ -63,7 +62,7 @@ class DBStorage:
         """This is a public method that removes an obj from the current DB
         session"""
         if obj is not None:
-            self.__session.delet(obj)
+            self.__session.delete(obj)
 
     def close(self):
         """This is a public method that closes the current DB session
@@ -73,25 +72,23 @@ class DBStorage:
     def reload(self):
         """Public class method that creates DB and start a new DB session"""
         Base.metadata.create_all(self.__engine)
-        safe_session = sessionmaker(bind=self.__enfine,
+        safe_session = sessionmaker(bind=self.__engine,
                                     expire_on_commit=False)
         Session = scoped_session(safe_session)
         self.__session = Session()
-
-    def build_data(self, cls, data: dict):
-        """public helper method to get rows and columns from the DB"""
-        if type(data) == dict:
-            sql = self.__session.query(cls)
-            for row in sql.all():
-                key = "{}.{}".format(cls.__name__, row.id)
-                data[key] = row
-            return (data)
 
     def all(self, cls=None):
         """Public method that returns data from the current DB session"""
         data = dict()
         if cls:
-            return self.build_data(cls, data)
-        for item in project_classes:
-            data = self.build_data(eval(item), data)
-        return (data)
+            if type(cls) == str:
+                cls.eval(cls)
+            obj = self.__session.query(cls)
+        elif cls is None:
+            obj = self.__session.query(Amenity).all()
+            obj = self.__session.query(City).all()
+            obj = self.__session.query(Place).all()
+            obj = self.__session.query(Review).all()
+            obj = self.__session.query(State).all()
+            obj = self.__session.query(User).all()
+        return ({"{}.{}".format(type(ob).__name__, ob.id): ob for ob in obj})
