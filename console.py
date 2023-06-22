@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """Importing some Standard modules and modules from our packages"""
 import cmd
 import sys
@@ -27,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     dot_cmds = ['all', 'count', 'create', 'show', 'destroy', 'update']
-    
+
     classes = {'BaseModel': BaseModel,
                'User': User,
                'Place': Place,
@@ -43,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
     def preloop(self) -> None:
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
-            print('(hbnb)')
+            print('(hbnb) ', end='')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
