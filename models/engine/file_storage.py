@@ -11,13 +11,7 @@ from models.user import User
 
 
 class FileStorage:
-    """
-    This is a class responsible for data storage for AirBnB Clone project.
-    Attributes:
-        __file_path: path to the JSON file
-        __objects: objects will be stored
-    """
-
+    """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
 
@@ -30,21 +24,20 @@ class FileStorage:
         Return:
             A dictionary of objects
         """
-        if cls is not None:
-            if type(cls) == str:
-                cls = eval(cls)
-            dict_cls = {}
+        if cls:
+            of_same_type = dict()
             for key, val in self.__objects.items():
-                if type(val) == cls:
-                    dict_cls[key] = val
-            return dict_cls
-        return self.__objects
+                if val.__class__ == cls:
+                    of_same_type[key] = val
+            return of_same_type
 
-    def new(self, obj) -> None:
+        return FileStorage.__objects
+
+    def new(self, obj):
         """Adds new object to storage dictionary"""
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
-    def save(self) -> None:
+    def save(self):
         """Saves storage dictionary to file"""
         with open(FileStorage.__file_path, 'w') as f:
             temp = {}
@@ -53,7 +46,7 @@ class FileStorage:
                 temp[key] = val.to_dict()
             json.dump(temp, f)
 
-    def reload(self) -> None:
+    def reload(self):
         """Loads storage dictionary from file"""
         from models.base_model import BaseModel
         from models.user import User
@@ -73,7 +66,7 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                        self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
@@ -85,11 +78,8 @@ class FileStorage:
             obj (dict): the object to delete from __object
         """
         if obj:
-            try:
-                del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
-            except (AttributeError, KeyError):
-                pass
+            key = "{}.{}".format(type(obj).__name__, obj.id)
 
-    def close(self):
-        """Call the reload method."""
-        self.reload()
+            if self.__objects[key]:
+                del self.__objects[key]
+                self.save()
