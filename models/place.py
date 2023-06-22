@@ -1,25 +1,18 @@
 #!/usr/bin/python3
-"""Importing some Standard modules and modules from our packages"""
+""" Place Module for HBNB project """
 from models.base_model import BaseModel
-
-"""
-This is a Python class that models a Place class but inherits from the
-BaseModel class as the Parent Class
-"""
 
 
 class Place(BaseModel):
-    """
-    This is a class modelling the Place object for AirBnB Clone project.
-    """
-    amenity_ids = []
+    """ A place to stay """
     city_id = ""
+    user_id = ""
+    name = ""
     description = ""
+    number_rooms = 0
+    number_bathrooms = 0
+    max_guest = 0
+    price_by_night = 0
     latitude = 0.0
     longitude = 0.0
-    max_guest = 0
-    name = ""
-    number_bathrooms = 0
-    number_rooms = 0
-    price_by_night = 0
-    user_id = ""
+    amenity_ids = []
