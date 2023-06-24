@@ -2,12 +2,12 @@
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 from models.base_model import BaseModel
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
 from models.amenity import Amenity
+from models.city import City
+from models.place import Place
 from models.review import Review
+from models.state import State
+from models.user import User
 
 """
 This is a Python class that will be responsible for file storage. In this
@@ -25,9 +25,6 @@ class FileStorage:
     """
     __file_path = 'file.json'
     __objects = {}
-    classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review}
 
     def all(self, cls=None) -> dict:
         """
@@ -37,15 +34,15 @@ class FileStorage:
         Return:
             A dictionary of objects
         """
-        objs = {}
         if cls is not None:
-            if cls.__name__ in FileStorage.classes:
-                for k, v in self.__objects.items():
-                    if k.split('.')[0] == cls.__name__:
-                        objs.update({k: v})
-        else:
-            objs = self.__objects
-        return (objs)
+            if type(cls) == str:
+                cls = eval(cls)
+            cls_dict = {}
+            for k, v in self.__objects.items():
+                if type(v) == cls:
+                    cls_dict[k] = v
+            return cls_dict
+        return self.__objects
 
     def new(self, obj) -> None:
         """
@@ -55,9 +52,7 @@ class FileStorage:
         Args:
             obj (dict) - a dictionaary object
         """
-        if obj:
-            item = "{}.{}".format(type(obj).__name__, obj.id)
-            self.__objects[item] = obj
+        self.__objects["{}.{}".format(type(obj).__name__, obj.id)] = obj
 
     def save(self) -> None:
         """
@@ -65,12 +60,9 @@ class FileStorage:
         attribute `__objects` (dict) into a JSON string and save it to a flat
         database (json file)
         """
-        with open(FileStorage.__file_path, 'w', encoding='UTF-8') as f:
-            temp = {}
-            temp.update(FileStorage.__objects)
-            for key, val in temp.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, f)
+        odict = {o: self.__objects[o].to_dict() for o in self.__objects.keys()}
+        with open(self.__file_path, "w", encoding="utf-8") as f:
+            json.dump(odict, f)
 
     def reload(self) -> None:
         """
@@ -78,12 +70,11 @@ class FileStorage:
         a dictionary of object, `__objects` only if `__file_path` exist.
         """
         try:
-            temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = \
-                        FileStorage.classes[val['__class__']](**val)
+            with open(self.__file_path, "r", encoding="utf-8") as f:
+                for o in json.load(f).values():
+                    name = o["__class__"]
+                    del o["__class__"]
+                    self.new(eval(name)(**o))
         except FileNotFoundError:
             pass
 
@@ -94,11 +85,10 @@ class FileStorage:
         Args:
             obj (dict): the object to delete from __object
         """
-        if obj:
-            item = "{}.{}".format(type(obj).__name__, obj.id)
-            if self.__objects[item]:
-                del self.__objects[item]
-                self.save()
+        try:
+            del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
+        except (AttributeError, KeyError):
+            pass
 
     def close(self) -> None:
         """This is a class public instance method that Deserialize JSON file

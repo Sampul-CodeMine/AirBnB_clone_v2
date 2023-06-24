@@ -1,20 +1,18 @@
 #!/usr/bin/python3
 """Importing some Standard modules and modules from our packages"""
-from models.amenity import Amenity
-from models.base_model import BaseModel
+from os import getenv
 from models.base_model import Base
+from models.base_model import BaseModel
+from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
 from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm import scoped_session
-from sqlalchemy.orm.session import sessionmaker
-from sqlalchemy.orm import Session
-from os import getenv
-project_classes = {"State": State, "City": City, "Amenity": Amenity,
-                   "User": User, "Place": Place, "Review": Review}
+from sqlalchemy.orm import sessionmaker
 
 """
 This is a Python class that will be responsible for DB storage. In this
@@ -51,8 +49,7 @@ class DBStorage:
         """This is a public method that adds an object to the current database
         session
         """
-        if obj:
-            self.__session.add(obj)
+        self.__session.add(obj)
 
     def save(self) -> None:
         """This is a public method that commits changes to the DB session
@@ -62,32 +59,33 @@ class DBStorage:
     def delete(self, obj=None) -> None:
         """This is a public method that removes an obj from the current DB
         session"""
-        if obj:
-            cls = project_classes[typ(obj).__name__]
-            self.__session.query(cls).filter(cls.id == obj.id).delete()
+        if obj is not None:
+            self.__session.delete(obj)
 
     def close(self) -> None:
         """This is a public method that closes the current DB scoped session
         """
-        self.__session.remove()
+        self.__session.close()
 
     def reload(self) -> None:
         """Public class method that creates DB and start a new DB session"""
         Base.metadata.create_all(self.__engine)
-        safe_session = sessionmaker(bind=self.__engine,
-                                    expire_on_commit=False)
-        self.__session = scoped_session(safe_session)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
+        self.__session = Session()
 
     def all(self, cls=None) -> dict:
         """Public method that returns data from the current DB session"""
-        data = dict()
-        if cls:
-            for field in self.__session.query(cls).all():
-                data.update({"{}.{}".format(type(cls).__name__,
-                                            field.id,): field})
+        if cls is None:
+            objs = self.__session.query(State).all()
+            objs.extend(self.__session.query(City).all())
+            objs.extend(self.__session.query(User).all())
+            objs.extend(self.__session.query(Place).all())
+            objs.extend(self.__session.query(Review).all())
+            objs.extend(self.__session.query(Amenity).all())
         else:
-            for k, v in project_classes.items():
-                for field in self.__session.query(v):
-                    data.update({"{}.{}".format(type(field).__name__,
-                                                field.id,): field})
-        return (data)
+            if type(cls) == str:
+                cls = eval(cls)
+            objs = self.__session.query(cls)
+        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}

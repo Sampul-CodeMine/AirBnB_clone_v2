@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
-import models
-from models.base_model import BaseModel
 from models.base_model import Base
-from sqlalchemy import Column, String, ForeignKey
+from models.base_model import BaseModel
+from sqlalchemy import Column
+from sqlalchemy import ForeignKey
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 """
@@ -18,11 +19,12 @@ class City(BaseModel, Base):
     It inherits BaseModel and Base as Parent Classes
 
     Attributes:
+    tablename: cities
         places (sqlalchemy relationship): The user-Place relationship.
         state_id (str): the id of the State where the city is
         name (str): the name of the city
     """
     __tablename__ = 'cities'
     name = Column(String(128), nullable=False)
-    state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-    places = relationship('Place', cascade='all, delete', backref='cities')
+    state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
+    places = relationship("Place", backref="cities", cascade="delete")
