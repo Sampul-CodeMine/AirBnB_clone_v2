@@ -6,6 +6,7 @@ import os.path as osp
 from datetime import datetime as dt
 from fabric.api import local
 
+
 def do_pack():
     """
     A function that creates a .tgz archive file containing all the
