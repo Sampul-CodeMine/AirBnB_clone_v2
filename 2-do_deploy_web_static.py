@@ -10,7 +10,7 @@ from fabric.api import run
 from fabric.api import put
 
 """setting the environment host for the servers"""
-env.hosts = [3.84.237.114, 100.25.131.115]
+env.hosts = ['3.84.237.114', '100.25.131.115']
 
 
 def do_pack():
