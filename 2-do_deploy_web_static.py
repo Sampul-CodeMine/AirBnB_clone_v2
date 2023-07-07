@@ -35,7 +35,14 @@ def do_pack():
 
 def do_deploy(archive_path):
     """
-    A function that distributes an archive file to web servers
+    A function that distributes an archive file to a web server
+
+    Args:
+        archive_path (str): path to the archive to distribute
+
+    Returns:
+        True if the archive path exist and there is no error
+        Otherwise - False
     """
     if osp.isfile(archive_path) is False:
         return (False)
@@ -71,8 +78,8 @@ def do_deploy(archive_path):
     if run("sudo rm -rf /data/web_static/current").failed is True:
         return (False)
 
-    if run("sudo ln -s /data/web_static/releases/{}/ /data/web_static/current".
-           format(fn)).failed is True:
+    if run("sudo ln -s /data/web_static/releases/{}/"
+           "/data/web_static/current".format(fn)).failed is True:
         return (False)
 
     return True
