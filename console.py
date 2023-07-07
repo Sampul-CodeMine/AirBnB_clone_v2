@@ -23,7 +23,7 @@ class HBNBCommand(cmd.Cmd):
     """
     This is a class modelling the inteface (CLI) for AirBnB Clone project.
     """
-    
+
     __classes = {
         "BaseModel",
         "User",
@@ -33,10 +33,10 @@ class HBNBCommand(cmd.Cmd):
         "Place",
         "Review"
     }
-    
+
     """Specify the prompt for the CLI"""
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-    
+
     def preloop(self) -> None:
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
