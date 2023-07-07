@@ -3,34 +3,12 @@
 Module that generates a .tgz archive from the web_static directory
 """
 import os.path as osp
-from datetime import datetime as dt
-from fabric.api import local
 from fabric.api import env
 from fabric.api import run
 from fabric.api import put
 
 """setting the environment host for the servers"""
 env.hosts = ['3.84.237.114', '100.25.131.115']
-
-
-def do_pack():
-    """
-    A function that creates a .tgz archive file containing all the
-    files in the web_static folder
-    """
-    date = dt.utcnow()
-    file = "versions/web_static_{}{}{}{}{}{}.tgz".format(date.year,
-                                                         date.month,
-                                                         date.day,
-                                                         date.hour,
-                                                         date.minute,
-                                                         date.second)
-    if osp.isdir("versions") is False:
-        if local("mkdir -p versions").failed is True:
-            return (None)
-    if local("tar -cvzf {} web_static".format(file)).failed is True:
-        return (None)
-    return (file)
 
 
 def do_deploy(archive_path):
@@ -78,8 +56,8 @@ def do_deploy(archive_path):
     if run("sudo rm -rf /data/web_static/current").failed is True:
         return (False)
 
-    if run("sudo ln -s /data/web_static/releases/{}/"
-           "/data/web_static/current".format(fn)).failed is True:
+    if run("sudo ln -s /data/web_static/releases/{}/ /data/web_static/current"
+            .format(fn)).failed is True:
         return (False)
 
     return True
