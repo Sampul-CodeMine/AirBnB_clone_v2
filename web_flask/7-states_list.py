@@ -3,7 +3,6 @@
 A Python Flask script that starts a web application listening on port 5000
 with ip 0.0.0.0
 """
-"""importing libraries and modules"""
 from models import storage
 from models.state import State
 from flask import Flask
